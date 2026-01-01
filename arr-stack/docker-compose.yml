@@ -1,0 +1,111 @@
+networks:
+  media_net:
+    driver: bridge
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    networks:
+      - media_net
+    ports:
+      - 8096:8096
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
+    volumes:
+      - ${JELLYFIN_CONFIG}:/config
+      - ${MEDIA_ROOT}:/data/media
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_URL}
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    networks:
+      - media_net
+    ports:
+      - 8004:8004
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      - ${QBIT_CONFIG}:/config
+      - ${MEDIA_ROOT}:/data/media
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+      - QBITTORRENT__WEBUI__USERNAME=${QBIT_USER:-admin}
+      - QBITTORRENT__WEBUI__PASSWORD=${QBIT_PASS:-adminadmin}
+      - WEBUI_PORT=8004
+      - TORRENTING_PORT=6881
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    networks:
+      - media_net
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${SONARR_CONFIG}:/config
+      - ${MEDIA_ROOT}:/data/media
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    networks:
+      - media_net
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${RADARR_CONFIG}:/config
+      - ${MEDIA_ROOT}:/data/media
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    networks:
+      - media_net
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${PROWLARR_CONFIG}:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - media_net
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${BAZARR_CONFIG}:/config
+      - ${MEDIA_ROOT}:/data/media
+    ports:
+      - 6767:6767
+    restart: unless-stopped
