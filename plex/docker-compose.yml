@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - VERSION=docker
+      - TZ=${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${PLEX_CONFIG}:/config
+      # Unificando volumes para manter padrão e hardlinks futuros
+      - ${MEDIA_ROOT}:/data/media
+    restart: unless-stopped
