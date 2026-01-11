@@ -27,6 +27,7 @@ graph TD
     
     classDef security fill:#f9f,stroke:#333,stroke-width:2px;
     class TS security;
+```
 
 📂 Estrutura de Diretórios e Volumes
 
@@ -93,5 +94,5 @@ nano .env
 Inicie as Stacks:
 
 docker-compose -f plex/docker-compose.yml up -d
-docker-compose -f arr-stack/docker-compose.yml up -d```
+docker-compose -f arr-stack/docker-compose.yml up -d
 
