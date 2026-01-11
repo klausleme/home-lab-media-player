@@ -1,5 +1,5 @@
 
-```
+
 # Home Lab Media Server Infrastructure
 
 ![Oracle Cloud](https://img.shields.io/badge/Oracle_Cloud-F80000?style=for-the-badge&logo=oracle&logoColor=white)
